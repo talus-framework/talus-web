@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo docker kill talus-web
+sudo docker rm talus-web
