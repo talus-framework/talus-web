@@ -1,5 +1,20 @@
 #!/bin/bash
 
+if [ ! -e "/usr/bin/docker" ]; then
+        echo "[+] installing docker"
+        wget -qO- https://get.docker.com/ | sh
+        sudo usermod -aG docker $(whoami)
+        echo "[+] done installing docker"
+fi
+
+if docker images | grep -q 'talus-web'; then
+	echo "[+] talus-web apache2 docker container already installed"
+	echo "If you want to rebuild this container, perform docker rmi talus-web"
+else
+	echo "[+] installing talus-web docker apache2 web container"
+	docker pull talus/talus-web
+fi
+
 sudo mkdir -p /talus/data /var/log/talus/apache2
 
 mkdir -p /tmp/talus/tmp
@@ -28,6 +43,8 @@ WantedBy=default.target
 EOF
 
 sudo chmod 664 /etc/systemd/system/docker.talus-web.service
+sudo systemctl start docker.talus-web
+sudo systemctl enable docker.talus-web
 
 else
 
@@ -43,5 +60,7 @@ script
    $(readlink -f $DIR)/start
 end script
 EOF
+
+sudo start talus-web
 
 fi
