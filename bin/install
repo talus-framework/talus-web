@@ -30,7 +30,7 @@ cat << EOF | sudo tee /etc/systemd/system/docker.talus-web.service > /dev/null
 [Unit]
 Description=Talus Web Container
 Requires=docker.service
-After=docker.service
+After=docker.talus-amqp.service
 
 [Service]
 Restart=always
