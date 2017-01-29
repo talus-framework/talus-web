@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
 if [ ! -e "/usr/bin/docker" ]; then
         echo "[+] installing docker"
         wget -qO- https://get.docker.com/ | sh
@@ -14,6 +16,14 @@ else
 	echo "[+] installing talus-web docker apache2 web container"
 	docker pull talus/talus-web
 fi
+
+if [ ! -d $DIR/../../docs ]; then
+        echo "$DIR/../../docs does not exist."
+        echo "the docs repository must be checked out alongside talus-web"
+        exit
+fi
+
+$DIR/../../docs/bin/build_docs
 
 sudo mkdir -p /talus/data /var/log/talus/apache2
 
