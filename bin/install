@@ -1,30 +1,5 @@
 #!/bin/bash
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-
-if [ ! -e "/usr/bin/docker" ]; then
-        echo "[+] installing docker"
-        wget -qO- https://get.docker.com/ | sh
-        sudo usermod -aG docker $(whoami)
-        echo "[+] done installing docker"
-fi
-
-if docker images | grep -q 'talus-web'; then
-	echo "[+] talus-web apache2 docker container already installed"
-	echo "If you want to rebuild this container, perform docker rmi talus-web"
-else
-	echo "[+] installing talus-web docker apache2 web container"
-	docker pull talus/talus-web
-fi
-
-if [ ! -d $DIR/../../docs ]; then
-        echo "$DIR/../../docs does not exist."
-        echo "the docs repository must be checked out alongside talus-web"
-        exit
-fi
-
-$DIR/../../docs/bin/build_docs
-
 sudo mkdir -p /talus/data /var/log/talus/apache2
 
 mkdir -p /tmp/talus/tmp
@@ -32,7 +7,6 @@ sudo chmod -R o+rws /tmp/talus/tmp
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-$DIR/build
 if [[ `systemctl` =~ -\.mount ]]; then
 
 echo "Installing talus-web as systemd service"
@@ -40,7 +14,7 @@ cat << EOF | sudo tee /etc/systemd/system/docker.talus-web.service > /dev/null
 [Unit]
 Description=Talus Web Container
 Requires=docker.service
-After=docker.talus-amqp.service
+After=docker.service
 
 [Service]
 Restart=always
@@ -53,8 +27,9 @@ WantedBy=default.target
 EOF
 
 sudo chmod 664 /etc/systemd/system/docker.talus-web.service
-sudo systemctl start docker.talus-web
-sudo systemctl enable docker.talus-web
+sudo systemctl daemon-reload
+sudo systemctl enable docker.talus-web.service
+sudo systemctl start docker.talus-web.service
 
 else
 
@@ -70,7 +45,5 @@ script
    $(readlink -f $DIR)/start
 end script
 EOF
-
-sudo start talus-web
 
 fi

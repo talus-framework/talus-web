@@ -17,14 +17,16 @@ if [ "$1" = "dev" ] ; then
 	sudo docker run \
 		-it \
 		--rm \
-		--link talus-db:talus-db \
-		-p 0.0.0.0:8080:8080 \
+		--net talus_default \
+		-p 0.0.0.0:80:80 \
 		-v /var/lib/libvirt/images:/images:ro \
 		-v $DIR/../app:/web \
 		-v /var/log/talus:/logs \
 		-v /tmp/talus/tmp:/tmp \
 		-v /talus/install:/talus_install \
 		-v /talus/talus_code_cache:/code_cache \
+                -v /etc/group:/etc/group:ro \
+                -v /etc/passwd:/etc/passwd:ro \
 		--name talus-web_dev \
 		$@ talus/talus-web
 else
@@ -32,14 +34,15 @@ else
 
 	sudo docker run \
 		--rm \
-		--link talus-db:talus-db \
+		--net talus_default \
 		-p 0.0.0.0:80:80 \
-		-p 0.0.0.0:8001:8001 \
 		-v /var/lib/libvirt/images:/images:ro \
 		-v /var/log/talus:/logs \
 		-v /tmp/talus/tmp:/tmp \
 		-v /talus/install:/talus_install \
 		-v /talus/talus_code_cache:/code_cache \
+                -v /etc/group:/etc/group:ro \
+                -v /etc/passwd:/etc/passwd:ro \
 		--name talus-web \
 		$@ talus/talus-web
 fi

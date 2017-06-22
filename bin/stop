@@ -1,4 +1,9 @@
 #!/bin/bash
+NAME=talus-web
+if docker ps -f name=$NAME | grep -q $NAME;
+then
+	echo "stopping temporary container ($NAME)"
+	sudo docker kill $NAME 2>&1 >/dev/null || true
+	sudo docker rm -f $NAME 2>&1 >/dev/null || true
+fi
 
-sudo docker kill talus-web
-sudo docker rm talus-web

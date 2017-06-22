@@ -14,6 +14,8 @@ ADD apache/envvars /etc/apache2/
 
 ADD apache/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 ADD apache/ports.conf /etc/apache2/ports.conf
+ADD apache/start_apache /usr/local/bin/start_apache
+RUN chmod +x /usr/local/bin/start_apache
 
 # Expose apache.
 EXPOSE 80
@@ -27,5 +29,5 @@ RUN cd /web \
   && NO_CONNECT=1 python manage.py collectstatic --noinput
 # confirm settings with apachectl -t -D DUMP_RUN_CFG in the container
 
-CMD ["/usr/sbin/apache2ctl", "-DFOREGROUND"]
+CMD ["/usr/local/bin/start_apache"]
 
