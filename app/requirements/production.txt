@@ -1,5 +1,5 @@
 #Django
-#djangorestframework==3.0.4
+#djangorestframework==3.11.2
 #git+git://github.com/marcgibbons/django-rest-swagger.git@master
 #django-rest-framework-mongoengine>=2.0
 #mongoengine
@@ -17,7 +17,7 @@ chardet==2.1.1
 colorama==0.2.5
 django-rest-framework-mongoengine==2.0.2
 django-rest-swagger==0.3.0
-djangorestframework==3.0.4
+djangorestframework==3.11.2
 html5lib==0.999
 meld3==0.6.10
 mongoengine==0.9.0
