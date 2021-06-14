@@ -26,5 +26,5 @@ requests
 sh
 six==1.5.2
 supervisor==3.0b2
-urllib3==1.7.1
+urllib3==1.26.5
 wsgiref==0.1.2
