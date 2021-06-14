@@ -10,7 +10,7 @@
 mime
 python-magic
 docutils
-Django==1.8.1
+Django==2.2.24
 PyYAML==5.4
 argparse==1.2.1
 chardet==2.1.1
